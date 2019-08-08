@@ -1,0 +1,27 @@
+{
+	"name": "DestinationDataset_ve9",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "houston_framework_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"cw_folderPath": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureDataLakeStoreFile",
+		"typeProperties": {
+			"format": {
+				"type": "JsonFormat",
+				"filePattern": "setOfObjects"
+			},
+			"fileName": "Retail_sales",
+			"folderPath": {
+				"value": "@dataset().cw_folderPath",
+				"type": "Expression"
+			}
+		}
+	}
+}
