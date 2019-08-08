@@ -1,0 +1,37 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "houstonFrameworkDF"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/houston_framework_ADLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDataLakeStore",
+				"typeProperties": {
+					"dataLakeStoreUri": "https://houstonframeworkdl.azuredatalakestore.net/webhdfs/v1",
+					"servicePrincipalId": "33af999d-5365-419e-b1b3-8efc10bd9070",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "**********"
+					},
+					"tenant": "687f51c3-0c5d-4905-84f8-97c683a5b9d1",
+					"subscriptionId": "81822429-5727-4170-bd34-6a1e0e8a9957",
+					"resourceGroupName": "neu_hou_data_framework"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
