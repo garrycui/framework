@@ -27,7 +27,7 @@
 					"source": {
 						"type": "SqlServerSource",
 						"sqlReaderQuery": {
-							"value": "select * from [dbo].[Sales] \nwhere [CreatedDate] >= '@{formatDateTime(pipeline().parameters.windowStart, 'yyyy-MM-dd HH:mm' )}' \nAND [CreatedDate] < '@{formatDateTime(pipeline().parameters.windowEnd, 'yyyy-MM-dd HH:mm' )}'",
+							"value": "select * from [dbo].[Sales] \nwhere [CreatedDate] >= '@{formatDateTime(pipeline().parameters.windowStart, 'yyyy-MM-dd HH:mm' )}' \nAND [CreatedDate] < '@{formatDateTime(pipeline().parameters.windowEnd, 'yyyy-MM-dd HH:mm' )}'pipeline().parameters.windowEndpipeline().parameters.windowStartpipeline().parameters.windowEndpipeline().parameters.windowStart",
 							"type": "Expression"
 						}
 					},
@@ -44,7 +44,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DestinationDataset_ve9",
+						"referenceName": "ADLS_Retail_sales",
 						"type": "DatasetReference",
 						"parameters": {
 							"cw_folderPath": "@{formatDateTime(pipeline().parameters.windowStart,'yyyy')}/@{formatDateTime(pipeline().parameters.windowStart,'MM')}/@{formatDateTime(pipeline().parameters.windowStart,'dd')}"
