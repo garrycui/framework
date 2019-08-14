@@ -1,0 +1,16 @@
+{
+	"name": "SourceDataset_we5",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "GCUI1_Retail",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Sales"
+		}
+	}
+}
