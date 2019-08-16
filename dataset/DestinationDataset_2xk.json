@@ -1,0 +1,15 @@
+{
+	"name": "DestinationDataset_2xk",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "houston_framework_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureDataLakeStoreFile",
+		"typeProperties": {
+			"fileName": "",
+			"folderPath": "houstonframeworkdemo"
+		}
+	}
+}
