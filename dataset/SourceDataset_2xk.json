@@ -1,0 +1,15 @@
+{
+	"name": "SourceDataset_2xk",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "localTestFileServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "FileShare",
+		"typeProperties": {
+			"fileName": "",
+			"folderPath": ""
+		}
+	}
+}
