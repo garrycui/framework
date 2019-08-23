@@ -41,7 +41,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"fileName": {
-								"value": "@pipeline().TriggerTime",
+								"value": "TimeformatDateTime(@pipeline().Trigger)",
 								"type": "Expression"
 							}
 						}
