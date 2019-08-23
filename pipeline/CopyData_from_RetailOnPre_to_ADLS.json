@@ -40,10 +40,7 @@
 						"referenceName": "ADLS_Retail_sales",
 						"type": "DatasetReference",
 						"parameters": {
-							"fileName": {
-								"value": "TimeformatDateTime(@pipeline().Trigger)",
-								"type": "Expression"
-							}
+							"fileName": "result.json"
 						}
 					}
 				]
