@@ -23,7 +23,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from [Retail].[dbo].[Sales] as sales"
+						"sqlReaderQuery": {
+							"value": "select * from Retail.dbo.Sales as sales where OrderDate >= formatDateTime(pipeline().TriggerTime)",
+							"type": "Expression"
+						}
 					},
 					"sink": {
 						"type": "AzureDataLakeStoreSink"
@@ -39,7 +42,13 @@
 				"outputs": [
 					{
 						"referenceName": "ADLS_Retail_sales",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"fileName": {
+								"value": "@pipeline().TriggerTime",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			},
@@ -83,7 +92,13 @@
 				"outputs": [
 					{
 						"referenceName": "ADLS_Retail_sales",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"fileName": {
+								"value": "@pipeline().TriggerTime",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			},
@@ -173,7 +188,13 @@
 				"outputs": [
 					{
 						"referenceName": "ADLS_Retail_sales",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"fileName": {
+								"value": "@pipeline().TriggerTime",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
