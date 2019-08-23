@@ -91,14 +91,8 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ADLS_Retail_sales",
-						"type": "DatasetReference",
-						"parameters": {
-							"fileName": {
-								"value": "@pipeline().TriggerTime",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "ADLS_JSON",
+						"type": "DatasetReference"
 					}
 				]
 			},
