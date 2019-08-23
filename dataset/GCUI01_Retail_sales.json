@@ -5,14 +5,6 @@
 			"referenceName": "GCUI1_Retail",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"StartingDate": {
-				"type": "string"
-			},
-			"EndingDate": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "SqlServerTable",
 		"schema": [
