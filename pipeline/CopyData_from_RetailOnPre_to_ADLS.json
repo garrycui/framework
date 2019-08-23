@@ -38,7 +38,13 @@
 				"outputs": [
 					{
 						"referenceName": "ADLS_Retail_sales",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"fileName": {
+								"value": "'result' + @pipeline().TriggerTime",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
