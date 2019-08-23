@@ -18,15 +18,15 @@
 					{
 						"name": "Source",
 						"value": "."
+					},
+					{
+						"name": "startingDate1"
 					}
 				],
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": {
-							"value": "select * from Retail.dbo.Sales as sales where OrderDate >= formatDateTime(pipeline().TriggerTime)",
-							"type": "Expression"
-						}
+						"sqlReaderStoredProcedureName": "[dbo].[CopyTestSrcStoredProcedureWithParameters]"
 					},
 					"sink": {
 						"type": "AzureDataLakeStoreSink"
@@ -195,6 +195,11 @@
 				]
 			}
 		],
+		"parameters": {
+			"StartingDate1": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
