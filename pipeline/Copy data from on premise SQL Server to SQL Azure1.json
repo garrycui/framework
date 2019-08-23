@@ -169,7 +169,15 @@
 						}
 					},
 					"sink": {
-						"type": "AzureDataLakeStoreSink"
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureDataLakeStoreWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
 					},
 					"enableStaging": false
 				},
@@ -181,14 +189,8 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ADLS_Retail_sales",
-						"type": "DatasetReference",
-						"parameters": {
-							"fileName": {
-								"value": "@pipeline().TriggerTime",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "ADLS_CSV",
+						"type": "DatasetReference"
 					}
 				]
 			}
