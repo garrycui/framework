@@ -108,8 +108,15 @@
 				],
 				"typeProperties": {
 					"source": {
-						"type": "FileSystemSource",
-						"recursive": true
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.*"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
 					},
 					"sink": {
 						"type": "AzureDataLakeStoreSink"
@@ -118,7 +125,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_JSON",
+						"referenceName": "DelimitedText2",
 						"type": "DatasetReference"
 					}
 				],
