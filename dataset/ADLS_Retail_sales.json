@@ -5,11 +5,6 @@
 			"referenceName": "houston_framework_ADLS",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"cw_folderPath": {
-				"type": "String"
-			}
-		},
 		"annotations": [],
 		"type": "AzureDataLakeStoreFile",
 		"typeProperties": {
@@ -22,10 +17,7 @@
 				"firstRowAsHeader": false
 			},
 			"fileName": "",
-			"folderPath": {
-				"value": "@dataset().cw_folderPath",
-				"type": "Expression"
-			}
+			"folderPath": "framework/DB"
 		}
 	}
 }
