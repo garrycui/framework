@@ -17,7 +17,7 @@
 				"type": "JsonFormat",
 				"filePattern": "setOfObjects"
 			},
-			"fileName": "Retail_sales",
+			"fileName": "",
 			"folderPath": {
 				"value": "@dataset().cw_folderPath",
 				"type": "Expression"
