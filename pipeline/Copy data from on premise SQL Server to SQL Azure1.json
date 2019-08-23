@@ -46,6 +46,49 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy2",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "."
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@select * from [Retail].[dbo].[Sales] where [OrderDate] >= (pipeline().TriggerTime -24) and [OrderDate] <= pipeline().TriggerTime ",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AzureDataLakeStoreSink"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "GCUI01_Retail_sales",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ADLS_Retail_sales",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
