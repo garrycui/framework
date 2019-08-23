@@ -5,6 +5,11 @@
 			"referenceName": "houston_framework_ADLS",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"fileName": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureDataLakeStoreFile",
 		"typeProperties": {
@@ -12,7 +17,10 @@
 				"type": "JsonFormat",
 				"filePattern": "setOfObjects"
 			},
-			"fileName": "",
+			"fileName": {
+				"value": "@dataset().fileName",
+				"type": "Expression"
+			},
 			"folderPath": "framework"
 		}
 	}
