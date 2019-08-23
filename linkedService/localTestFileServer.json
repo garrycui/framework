@@ -5,9 +5,9 @@
 		"annotations": [],
 		"type": "FileServer",
 		"typeProperties": {
-			"host": "C:\\Users\\Gary.Cui\\Desktop\\Main\\Framework\\data\\json",
+			"host": "C:\\Users\\Gary.Cui\\Desktop\\Main\\Framework\\data\\",
 			"userId": "gary.cui@neudesic.com",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJlOTliYWJkZi1jZTBjLTQwNjUtOWM2NS1mYjMyZmIzMzNhNGYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJlNTg0NzFlOC0zYzM3LTQ1ZTgtODY4MC0xZjM1OTcxMTgxMmUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "integrationRuntime2",
