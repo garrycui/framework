@@ -41,7 +41,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"fileName": {
-								"value": "'result' + @pipeline().TriggerTime",
+								"value": "@pipeline().TriggerTime",
 								"type": "Expression"
 							}
 						}
