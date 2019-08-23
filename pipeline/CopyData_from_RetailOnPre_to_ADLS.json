@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy_we5",
+				"name": "Copy1",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -15,13 +15,14 @@
 				},
 				"userProperties": [
 					{
-						"name": "Destination",
-						"value": "houstonframeworkdemo/retailSale"
+						"name": "Source",
+						"value": "."
 					}
 				],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "SqlServerSource",
+						"sqlReaderStoredProcedureName": "[dbo].[CopyTestSrcStoredProcedureWithParameters]"
 					},
 					"sink": {
 						"type": "AzureDataLakeStoreSink"
@@ -30,13 +31,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_we5",
+						"referenceName": "GCUI01_Retail_sales",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "DestinationDataset_we5",
+						"referenceName": "ADLS_Retail_sales",
 						"type": "DatasetReference"
 					}
 				]
