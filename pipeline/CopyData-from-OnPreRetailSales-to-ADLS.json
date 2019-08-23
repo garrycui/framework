@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "CopyData-from-OnPre-to-ADLS",
+				"name": "CopyData-from-OnPreJSON-to-ADLS",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -54,7 +54,19 @@
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "CopyData-from-OnPre-to-ADLS",
+						"activity": "CopyData-from-OnPreJSON-to-ADLS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CopyData-from-OnPreCSV-to-ADLS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CopyData-from-OnPreDB-to-ADLS",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -75,6 +87,106 @@
 					"referenceName": "houston_framework_Databricks",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "CopyData-from-OnPreCSV-to-ADLS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "[dbo].[Sales]"
+					},
+					{
+						"name": "Destination",
+						"value": "@{'framework'}/Retail_sales"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.*"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureDataLakeStoreSink"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ADLS_Retail_sales",
+						"type": "DatasetReference",
+						"parameters": {
+							"cw_folderPath": "framework"
+						}
+					}
+				]
+			},
+			{
+				"name": "CopyData-from-OnPreDB-to-ADLS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "[dbo].[Sales]"
+					},
+					{
+						"name": "Destination",
+						"value": "@{'framework'}/Retail_sales"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource"
+					},
+					"sink": {
+						"type": "AzureDataLakeStoreSink"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "GCUI01_Retail_sales",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ADLS_Retail_sales",
+						"type": "DatasetReference",
+						"parameters": {
+							"cw_folderPath": "framework"
+						}
+					}
+				]
 			}
 		],
 		"annotations": []
