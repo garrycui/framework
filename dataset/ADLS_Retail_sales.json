@@ -16,8 +16,8 @@
 				"skipLineCount": 0,
 				"firstRowAsHeader": false
 			},
-			"fileName": "",
-			"folderPath": "framework/DB"
+			"fileName": "JSON",
+			"folderPath": "framework"
 		}
 	}
 }
