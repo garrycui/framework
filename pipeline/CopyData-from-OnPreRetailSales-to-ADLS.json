@@ -81,7 +81,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/gary.cui@neudesic.com/houston-framework/Retail/retail_Sale_ETL"
+					"notebookPath": "/Users/gary.cui@neudesic.com/houston-framework-demo"
 				},
 				"linkedServiceName": {
 					"referenceName": "houston_framework_Databricks",
@@ -165,7 +165,11 @@
 				],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "select * from [dbo].[Sales] \nwhere [OrderDate] >= '@{formatDateTime(pipeline().parameters.windowStart, 'yyyy-MM-dd HH:mm' )}' \nAND [CreatedDate] < '@{formatDateTime(pipeline().parameters.windowEnd, 'yyyy-MM-dd HH:mm' )}'pipeline().parameters.windowEndpipeline().parameters.windowStartpipeline().parameters.windowEndpipeline().parameters.windowStart",
+							"type": "Expression"
+						}
 					},
 					"sink": {
 						"type": "AzureDataLakeStoreSink"
@@ -189,6 +193,14 @@
 				]
 			}
 		],
+		"parameters": {
+			"windowStart": {
+				"type": "String"
+			},
+			"windowEnd": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
