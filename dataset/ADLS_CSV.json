@@ -1,0 +1,187 @@
+{
+	"name": "ADLS_CSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "houston_framework_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureDataLakeStoreLocation",
+				"folderPath": "framework"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "{\"Prop_0\":\"ID\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_1\":\"Date\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_2\":\"DateType\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_3\":\"Age\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_4\":\"Sex\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_5\":\"Race\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_6\":\"ResidenceCity\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_7\":\"ResidenceCounty\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_8\":\"ResidenceState\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_9\":\"DeathCity\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_10\":\"DeathCounty\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_11\":\"Location\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_12\":\"LocationifOther\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_13\":\"DescriptionofInjury\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_14\":\"InjuryPlace\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_15\":\"InjuryCity\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_16\":\"InjuryCounty\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_17\":\"InjuryState\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_18\":\"COD\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_19\":\"OtherSignifican\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_20\":\"Heroin\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_21\":\"Cocaine\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_22\":\"Fentanyl\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_23\":\"FentanylAnalogue\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_24\":\"Oxycodone\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_25\":\"Oxymorphone\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_26\":\"Ethanol\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_27\":\"Hydrocodone\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_28\":\"Benzodiazepine\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_29\":\"Methadone\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_30\":\"Amphet\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_31\":\"Tramad\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_32\":\"Morphine_NotHeroin\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_33\":\"Hydromorphone\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_34\":\"Other\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_35\":\"OpiateNOS\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_36\":\"AnyOpioid\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_37\":\"MannerofDeath\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_38\":\"DeathCityGeo\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_39\":\"ResidenceCityGeo\"",
+				"type": "String"
+			},
+			{
+				"name": "\"Prop_40\":\"InjuryCityGeo\"}",
+				"type": "String"
+			}
+		]
+	}
+}

@@ -1,0 +1,65 @@
+{
+	"name": "Azure_Retail_sales",
+	"properties": {
+		"description": "Connect to your data destination store.",
+		"linkedServiceName": {
+			"referenceName": "houston_framework_db",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"structure": [
+			{
+				"name": "SalesOrderNumber",
+				"type": "String"
+			},
+			{
+				"name": "SalesOrderLineNumber",
+				"type": "Int32"
+			},
+			{
+				"name": "OrderDate",
+				"type": "Date"
+			},
+			{
+				"name": "StoreID",
+				"type": "Int32"
+			},
+			{
+				"name": "CustomerID",
+				"type": "Int32"
+			},
+			{
+				"name": "ProductID",
+				"type": "Int32"
+			},
+			{
+				"name": "SalesQuantity",
+				"type": "Int32"
+			},
+			{
+				"name": "UnitPrice",
+				"type": "Decimal"
+			},
+			{
+				"name": "UnitCost",
+				"type": "Decimal"
+			},
+			{
+				"name": "SalesAmount",
+				"type": "Decimal"
+			},
+			{
+				"name": "CreatedDate",
+				"type": "DateTime"
+			},
+			{
+				"name": "UpdatedDate",
+				"type": "DateTime"
+			}
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[Sales]"
+		}
+	}
+}

@@ -1,0 +1,27 @@
+{
+	"name": "DestinationDataset_qzm",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "houston_framework_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"cw_fileName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureDataLakeStoreFile",
+		"typeProperties": {
+			"format": {
+				"type": "JsonFormat",
+				"filePattern": "setOfObjects"
+			},
+			"fileName": {
+				"value": "@dataset().cw_fileName",
+				"type": "Expression"
+			},
+			"folderPath": "framework"
+		}
+	}
+}

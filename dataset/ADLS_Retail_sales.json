@@ -1,0 +1,27 @@
+{
+	"name": "ADLS_Retail_sales",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "houston_framework_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"fileName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureDataLakeStoreFile",
+		"typeProperties": {
+			"format": {
+				"type": "JsonFormat",
+				"filePattern": "setOfObjects"
+			},
+			"fileName": {
+				"value": "@dataset().fileName",
+				"type": "Expression"
+			},
+			"folderPath": "framework"
+		}
+	}
+}
