@@ -36,7 +36,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_2xk",
+						"referenceName": "SourceDataset_JSON",
 						"type": "DatasetReference"
 					}
 				],
@@ -81,7 +81,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_2xk",
+						"referenceName": "SourceDataset_JSON",
 						"type": "DatasetReference"
 					}
 				],

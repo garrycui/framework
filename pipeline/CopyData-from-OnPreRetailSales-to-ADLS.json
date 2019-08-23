@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "CopyData-from-OnPreRetail-to-ADLS",
+				"name": "CopyData-from-OnPre-to-ADLS",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -25,7 +25,8 @@
 				],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "FileSystemSource",
+						"recursive": true
 					},
 					"sink": {
 						"type": "AzureDataLakeStoreSink"
@@ -34,7 +35,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "GCUI01_Retail_sales",
+						"referenceName": "SourceDataset_JSON",
 						"type": "DatasetReference"
 					}
 				],
@@ -53,7 +54,7 @@
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "CopyData-from-OnPreRetail-to-ADLS",
+						"activity": "CopyData-from-OnPre-to-ADLS",
 						"dependencyConditions": [
 							"Succeeded"
 						]
