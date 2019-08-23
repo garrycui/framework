@@ -42,10 +42,7 @@
 				"outputs": [
 					{
 						"referenceName": "ADLS_Retail_sales",
-						"type": "DatasetReference",
-						"parameters": {
-							"cw_folderPath": "framework"
-						}
+						"type": "DatasetReference"
 					}
 				]
 			},
@@ -66,7 +63,7 @@
 						]
 					},
 					{
-						"activity": "CopyData-from-OnPreDB-to-ADLS",
+						"activity": "Copy Data1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -102,24 +99,17 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "[dbo].[Sales]"
+						"value": "."
 					},
 					{
 						"name": "Destination",
-						"value": "@{'framework'}/Retail_sales"
+						"value": "framework/DB/@{formatDateTime(pipeline().parameters.windowStart,'yyyy')}/@{formatDateTime(pipeline().parameters.windowStart,'MM')}/@{formatDateTime(pipeline().parameters.windowStart,'dd')}"
 					}
 				],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "FileServerReadSettings",
-							"recursive": true,
-							"wildcardFileName": "*.*"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
+						"type": "FileSystemSource",
+						"recursive": true
 					},
 					"sink": {
 						"type": "AzureDataLakeStoreSink"
@@ -128,22 +118,22 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DelimitedText2",
+						"referenceName": "SourceDataset_JSON",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ADLS_Retail_sales",
+						"referenceName": "DestinationDataset_qzm",
 						"type": "DatasetReference",
 						"parameters": {
-							"cw_folderPath": "framework"
+							"cw_fileName": "DB/@{formatDateTime(pipeline().parameters.windowStart,'yyyy')}/@{formatDateTime(pipeline().parameters.windowStart,'MM')}/@{formatDateTime(pipeline().parameters.windowStart,'dd')}"
 						}
 					}
 				]
 			},
 			{
-				"name": "CopyData-from-OnPreDB-to-ADLS",
+				"name": "Copy Data1",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -156,18 +146,14 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "[dbo].[Sales]"
-					},
-					{
-						"name": "Destination",
-						"value": "@{'framework'}/Retail_sales"
+						"value": "."
 					}
 				],
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
 						"sqlReaderQuery": {
-							"value": "select * from [dbo].[Sales] \nwhere [OrderDate] >= '@{formatDateTime(pipeline().parameters.windowStart, 'yyyy-MM-dd HH:mm' )}' \nAND [CreatedDate] < '@{formatDateTime(pipeline().parameters.windowEnd, 'yyyy-MM-dd HH:mm' )}'pipeline().parameters.windowEndpipeline().parameters.windowStartpipeline().parameters.windowEndpipeline().parameters.windowStart",
+							"value": "@select * from [Retail].[dbo].[Sales] where [OrderDate] >= (pipeline().TriggerTime -24) and [OrderDate] <= pipeline().TriggerTime ",
 							"type": "Expression"
 						}
 					},
@@ -185,10 +171,7 @@
 				"outputs": [
 					{
 						"referenceName": "ADLS_Retail_sales",
-						"type": "DatasetReference",
-						"parameters": {
-							"cw_folderPath": "framework"
-						}
+						"type": "DatasetReference"
 					}
 				]
 			}
