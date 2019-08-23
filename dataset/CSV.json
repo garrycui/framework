@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText2",
+	"name": "CSV",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "localTestFileServer",
