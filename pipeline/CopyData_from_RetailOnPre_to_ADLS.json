@@ -147,6 +147,45 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "data-Transformation",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "CopyData-from-OnPreDB-to-ADLS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CopyData-from-OnPreJSON-to-ADLS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CopyData-from-OnPreCSV-to-ADLS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/gary.cui@neudesic.com/houston-framework-demo"
+				},
+				"linkedServiceName": {
+					"referenceName": "houston_framework_Databricks",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"annotations": []
