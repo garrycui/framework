@@ -1,0 +1,90 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "houston-framework-df"
+		},
+		"GCUI01_connectionString": {
+			"value": ""
+		},
+		"GCUI1_Retail_connectionString": {
+			"value": ""
+		},
+		"houston_framework_ADLS_servicePrincipalKey": {
+			"value": ""
+		},
+		"houston_framework_Databricks_accessToken": {
+			"value": ""
+		},
+		"houston_framework_db_connectionString": {
+			"value": ""
+		},
+		"localTestFileServer_password": {
+			"value": ""
+		},
+		"ADLS_JSON_properties_typeProperties_fileName": {
+			"value": ""
+		},
+		"ADLS_JSON_properties_typeProperties_folderPath": {
+			"value": "framework"
+		},
+		"ADLS_Retail_sales_properties_typeProperties_fileName": {
+			"value": "@dataset().fileName"
+		},
+		"ADLS_Retail_sales_properties_typeProperties_folderPath": {
+			"value": "framework"
+		},
+		"DestinationDataset_2xk_properties_typeProperties_fileName": {
+			"value": ""
+		},
+		"DestinationDataset_2xk_properties_typeProperties_folderPath": {
+			"value": "houstonframeworkdemo"
+		},
+		"DestinationDataset_qzm_properties_typeProperties_fileName": {
+			"value": "@dataset().cw_fileName"
+		},
+		"DestinationDataset_qzm_properties_typeProperties_folderPath": {
+			"value": "framework"
+		},
+		"DestinationDataset_we5_properties_typeProperties_fileName": {
+			"value": "retailSale"
+		},
+		"DestinationDataset_we5_properties_typeProperties_folderPath": {
+			"value": "houstonframeworkdemo"
+		},
+		"SourceDataset_JSON_properties_typeProperties_fileName": {
+			"value": ""
+		},
+		"SourceDataset_JSON_properties_typeProperties_folderPath": {
+			"value": "json"
+		},
+		"houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri": {
+			"value": "https://houstonframeworkdl.azuredatalakestore.net/webhdfs/v1"
+		},
+		"houston_framework_ADLS_properties_typeProperties_servicePrincipalId": {
+			"value": "33af999d-5365-419e-b1b3-8efc10bd9070"
+		},
+		"houston_framework_ADLS_properties_typeProperties_tenant": {
+			"value": "687f51c3-0c5d-4905-84f8-97c683a5b9d1"
+		},
+		"houston_framework_ADLS_properties_typeProperties_subscriptionId": {
+			"value": "81822429-5727-4170-bd34-6a1e0e8a9957"
+		},
+		"houston_framework_ADLS_properties_typeProperties_resourceGroupName": {
+			"value": "neu_hou_data_framework"
+		},
+		"localTestFileServer_properties_typeProperties_host": {
+			"value": "C:\\Users\\Gary.Cui\\Desktop\\Main\\Framework\\data\\"
+		},
+		"localTestFileServer_properties_typeProperties_userId": {
+			"value": "gary.cui@neudesic.com"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

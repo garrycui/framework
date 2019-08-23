@@ -1,0 +1,237 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "houston-framework-df"
+		},
+		"GCUI01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'GCUI01'"
+		},
+		"GCUI1_Retail_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'GCUI1_Retail'"
+		},
+		"houston_framework_ADLS_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'houston_framework_ADLS'"
+		},
+		"houston_framework_Databricks_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'houston_framework_Databricks'"
+		},
+		"houston_framework_db_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'houston_framework_db'"
+		},
+		"localTestFileServer_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'localTestFileServer'"
+		},
+		"ADLS_JSON_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"ADLS_JSON_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "framework"
+		},
+		"ADLS_Retail_sales_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().fileName"
+		},
+		"ADLS_Retail_sales_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "framework"
+		},
+		"DestinationDataset_2xk_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"DestinationDataset_2xk_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "houstonframeworkdemo"
+		},
+		"DestinationDataset_qzm_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().cw_fileName"
+		},
+		"DestinationDataset_qzm_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "framework"
+		},
+		"DestinationDataset_we5_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "retailSale"
+		},
+		"DestinationDataset_we5_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "houstonframeworkdemo"
+		},
+		"SourceDataset_JSON_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"SourceDataset_JSON_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "json"
+		},
+		"houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri": {
+			"type": "string",
+			"defaultValue": "https://houstonframeworkdl.azuredatalakestore.net/webhdfs/v1"
+		},
+		"houston_framework_ADLS_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "33af999d-5365-419e-b1b3-8efc10bd9070"
+		},
+		"houston_framework_ADLS_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "687f51c3-0c5d-4905-84f8-97c683a5b9d1"
+		},
+		"houston_framework_ADLS_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "81822429-5727-4170-bd34-6a1e0e8a9957"
+		},
+		"houston_framework_ADLS_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "neu_hou_data_framework"
+		},
+		"localTestFileServer_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\Gary.Cui\\Desktop\\Main\\Framework\\data\\"
+		},
+		"localTestFileServer_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "gary.cui@neudesic.com"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas Token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"houston_framework_ADLS_servicePrincipalKey": {
+						"value": "[parameters('houston_framework_ADLS_servicePrincipalKey')]"
+					},
+					"houston_framework_Databricks_accessToken": {
+						"value": "[parameters('houston_framework_Databricks_accessToken')]"
+					},
+					"houston_framework_db_connectionString": {
+						"value": "[parameters('houston_framework_db_connectionString')]"
+					},
+					"GCUI01_connectionString": {
+						"value": "[parameters('GCUI01_connectionString')]"
+					},
+					"GCUI1_Retail_connectionString": {
+						"value": "[parameters('GCUI1_Retail_connectionString')]"
+					},
+					"localTestFileServer_password": {
+						"value": "[parameters('localTestFileServer_password')]"
+					},
+					"houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri": {
+						"value": "[parameters('houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri')]"
+					},
+					"houston_framework_ADLS_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('houston_framework_ADLS_properties_typeProperties_servicePrincipalId')]"
+					},
+					"houston_framework_ADLS_properties_typeProperties_tenant": {
+						"value": "[parameters('houston_framework_ADLS_properties_typeProperties_tenant')]"
+					},
+					"houston_framework_ADLS_properties_typeProperties_subscriptionId": {
+						"value": "[parameters('houston_framework_ADLS_properties_typeProperties_subscriptionId')]"
+					},
+					"houston_framework_ADLS_properties_typeProperties_resourceGroupName": {
+						"value": "[parameters('houston_framework_ADLS_properties_typeProperties_resourceGroupName')]"
+					},
+					"ADLS_JSON_properties_typeProperties_fileName": {
+						"value": "[parameters('ADLS_JSON_properties_typeProperties_fileName')]"
+					},
+					"ADLS_JSON_properties_typeProperties_folderPath": {
+						"value": "[parameters('ADLS_JSON_properties_typeProperties_folderPath')]"
+					},
+					"ADLS_Retail_sales_properties_typeProperties_fileName": {
+						"value": "[parameters('ADLS_Retail_sales_properties_typeProperties_fileName')]"
+					},
+					"ADLS_Retail_sales_properties_typeProperties_folderPath": {
+						"value": "[parameters('ADLS_Retail_sales_properties_typeProperties_folderPath')]"
+					},
+					"DestinationDataset_2xk_properties_typeProperties_fileName": {
+						"value": "[parameters('DestinationDataset_2xk_properties_typeProperties_fileName')]"
+					},
+					"DestinationDataset_2xk_properties_typeProperties_folderPath": {
+						"value": "[parameters('DestinationDataset_2xk_properties_typeProperties_folderPath')]"
+					},
+					"DestinationDataset_qzm_properties_typeProperties_fileName": {
+						"value": "[parameters('DestinationDataset_qzm_properties_typeProperties_fileName')]"
+					},
+					"DestinationDataset_qzm_properties_typeProperties_folderPath": {
+						"value": "[parameters('DestinationDataset_qzm_properties_typeProperties_folderPath')]"
+					},
+					"DestinationDataset_we5_properties_typeProperties_fileName": {
+						"value": "[parameters('DestinationDataset_we5_properties_typeProperties_fileName')]"
+					},
+					"DestinationDataset_we5_properties_typeProperties_folderPath": {
+						"value": "[parameters('DestinationDataset_we5_properties_typeProperties_folderPath')]"
+					},
+					"localTestFileServer_properties_typeProperties_host": {
+						"value": "[parameters('localTestFileServer_properties_typeProperties_host')]"
+					},
+					"localTestFileServer_properties_typeProperties_userId": {
+						"value": "[parameters('localTestFileServer_properties_typeProperties_userId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"SourceDataset_JSON_properties_typeProperties_fileName": {
+						"value": "[parameters('SourceDataset_JSON_properties_typeProperties_fileName')]"
+					},
+					"SourceDataset_JSON_properties_typeProperties_folderPath": {
+						"value": "[parameters('SourceDataset_JSON_properties_typeProperties_folderPath')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_0')]"
+			]
+		}
+	]
+}

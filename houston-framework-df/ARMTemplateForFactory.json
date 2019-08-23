@@ -1,0 +1,1667 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "houston-framework-df"
+		},
+		"GCUI01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'GCUI01'"
+		},
+		"GCUI1_Retail_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'GCUI1_Retail'"
+		},
+		"houston_framework_ADLS_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'houston_framework_ADLS'"
+		},
+		"houston_framework_Databricks_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'houston_framework_Databricks'"
+		},
+		"houston_framework_db_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'houston_framework_db'"
+		},
+		"localTestFileServer_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'localTestFileServer'"
+		},
+		"ADLS_JSON_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"ADLS_JSON_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "framework"
+		},
+		"ADLS_Retail_sales_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().fileName"
+		},
+		"ADLS_Retail_sales_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "framework"
+		},
+		"DestinationDataset_2xk_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"DestinationDataset_2xk_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "houstonframeworkdemo"
+		},
+		"DestinationDataset_qzm_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().cw_fileName"
+		},
+		"DestinationDataset_qzm_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "framework"
+		},
+		"DestinationDataset_we5_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "retailSale"
+		},
+		"DestinationDataset_we5_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "houstonframeworkdemo"
+		},
+		"SourceDataset_JSON_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"SourceDataset_JSON_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "json"
+		},
+		"houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri": {
+			"type": "string",
+			"defaultValue": "https://houstonframeworkdl.azuredatalakestore.net/webhdfs/v1"
+		},
+		"houston_framework_ADLS_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "33af999d-5365-419e-b1b3-8efc10bd9070"
+		},
+		"houston_framework_ADLS_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "687f51c3-0c5d-4905-84f8-97c683a5b9d1"
+		},
+		"houston_framework_ADLS_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "81822429-5727-4170-bd34-6a1e0e8a9957"
+		},
+		"houston_framework_ADLS_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "neu_hou_data_framework"
+		},
+		"localTestFileServer_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\Gary.Cui\\Desktop\\Main\\Framework\\data\\"
+		},
+		"localTestFileServer_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "gary.cui@neudesic.com"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyData_from_RetailOnPre_to_ADLS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CopyData-from-OnPreDB-to-ADLS",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "."
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderStoredProcedureName": "[[dbo].[CopyTestSrcStoredProcedureWithParameters]"
+							},
+							"sink": {
+								"type": "AzureDataLakeStoreSink"
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "GCUI01_Retail_sales",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ADLS_Retail_sales",
+								"type": "DatasetReference",
+								"parameters": {
+									"fileName": "result.json"
+								}
+							}
+						]
+					},
+					{
+						"name": "CopyData-from-OnPreJSON-to-ADLS",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "[[dbo].[Sales]"
+							},
+							{
+								"name": "Destination",
+								"value": "@{'framework'}/Retail_sales"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "FileSystemSource",
+								"recursive": true
+							},
+							"sink": {
+								"type": "AzureDataLakeStoreSink"
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_JSON",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ADLS_JSON",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "CopyData-from-OnPreCSV-to-ADLS",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "[[dbo].[Sales]"
+							},
+							{
+								"name": "Destination",
+								"value": "@{'framework'}/Retail_sales"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.*"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureDataLakeStoreWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "CSV",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ADLS_CSV",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "data-Transformation",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "CopyData-from-OnPreDB-to-ADLS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "CopyData-from-OnPreJSON-to-ADLS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "CopyData-from-OnPreCSV-to-ADLS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/gary.cui@neudesic.com/houston-framework-demo"
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_Databricks",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/GCUI01_Retail_sales')]",
+				"[concat(variables('factoryId'), '/datasets/ADLS_Retail_sales')]",
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_JSON')]",
+				"[concat(variables('factoryId'), '/datasets/ADLS_JSON')]",
+				"[concat(variables('factoryId'), '/datasets/CSV')]",
+				"[concat(variables('factoryId'), '/datasets/ADLS_CSV')]",
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_Databricks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyPipeline_qzm')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_qzm",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "."
+							},
+							{
+								"name": "Destination",
+								"value": "framework/DB/@{formatDateTime(pipeline().parameters.windowStart,'yyyy')}/@{formatDateTime(pipeline().parameters.windowStart,'MM')}/@{formatDateTime(pipeline().parameters.windowStart,'dd')}"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": {
+									"value": "select * from [Retail].[dbo].[Sales] \nwhere [OrderDate] >= '@{formatDateTime(pipeline().parameters.windowStart, 'yyyy-MM-dd HH:mm' )}' \nAND [OrderDate] < '@{formatDateTime(pipeline().parameters.windowEnd, 'yyyy-MM-dd HH:mm' )}'",
+									"type": "Expression"
+								}
+							},
+							"sink": {
+								"type": "AzureDataLakeStoreSink"
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_qzm",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_qzm",
+								"type": "DatasetReference",
+								"parameters": {
+									"cw_fileName": "DB/@{formatDateTime(pipeline().parameters.windowStart,'yyyy')}/@{formatDateTime(pipeline().parameters.windowStart,'MM')}/@{formatDateTime(pipeline().parameters.windowStart,'dd')}"
+								}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"windowStart": {
+						"type": "String"
+					},
+					"windowEnd": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_qzm')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_qzm')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_CSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "houston_framework_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureDataLakeStoreLocation",
+						"folderPath": "framework"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "{\"Prop_0\":\"ID\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_1\":\"Date\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_2\":\"DateType\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_3\":\"Age\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_4\":\"Sex\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_5\":\"Race\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_6\":\"ResidenceCity\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_7\":\"ResidenceCounty\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_8\":\"ResidenceState\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_9\":\"DeathCity\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_10\":\"DeathCounty\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_11\":\"Location\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_12\":\"LocationifOther\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_13\":\"DescriptionofInjury\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_14\":\"InjuryPlace\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_15\":\"InjuryCity\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_16\":\"InjuryCounty\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_17\":\"InjuryState\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_18\":\"COD\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_19\":\"OtherSignifican\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_20\":\"Heroin\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_21\":\"Cocaine\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_22\":\"Fentanyl\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_23\":\"FentanylAnalogue\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_24\":\"Oxycodone\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_25\":\"Oxymorphone\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_26\":\"Ethanol\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_27\":\"Hydrocodone\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_28\":\"Benzodiazepine\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_29\":\"Methadone\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_30\":\"Amphet\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_31\":\"Tramad\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_32\":\"Morphine_NotHeroin\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_33\":\"Hydromorphone\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_34\":\"Other\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_35\":\"OpiateNOS\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_36\":\"AnyOpioid\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_37\":\"MannerofDeath\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_38\":\"DeathCityGeo\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_39\":\"ResidenceCityGeo\"",
+						"type": "String"
+					},
+					{
+						"name": "\"Prop_40\":\"InjuryCityGeo\"}",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_JSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "houston_framework_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureDataLakeStoreFile",
+				"typeProperties": {
+					"format": {
+						"type": "JsonFormat"
+					},
+					"fileName": "[parameters('ADLS_JSON_properties_typeProperties_fileName')]",
+					"folderPath": "[parameters('ADLS_JSON_properties_typeProperties_folderPath')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_Retail_sales')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "houston_framework_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"fileName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureDataLakeStoreFile",
+				"typeProperties": {
+					"format": {
+						"type": "JsonFormat",
+						"filePattern": "setOfObjects"
+					},
+					"fileName": {
+						"value": "[parameters('ADLS_Retail_sales_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": "[parameters('ADLS_Retail_sales_properties_typeProperties_folderPath')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Azure_Retail_sales')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connect to your data destination store.",
+				"linkedServiceName": {
+					"referenceName": "houston_framework_db",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"structure": [
+					{
+						"name": "SalesOrderNumber",
+						"type": "String"
+					},
+					{
+						"name": "SalesOrderLineNumber",
+						"type": "Int32"
+					},
+					{
+						"name": "OrderDate",
+						"type": "Date"
+					},
+					{
+						"name": "StoreID",
+						"type": "Int32"
+					},
+					{
+						"name": "CustomerID",
+						"type": "Int32"
+					},
+					{
+						"name": "ProductID",
+						"type": "Int32"
+					},
+					{
+						"name": "SalesQuantity",
+						"type": "Int32"
+					},
+					{
+						"name": "UnitPrice",
+						"type": "Decimal"
+					},
+					{
+						"name": "UnitCost",
+						"type": "Decimal"
+					},
+					{
+						"name": "SalesAmount",
+						"type": "Decimal"
+					},
+					{
+						"name": "CreatedDate",
+						"type": "DateTime"
+					},
+					{
+						"name": "UpdatedDate",
+						"type": "DateTime"
+					}
+				],
+				"typeProperties": {
+					"tableName": "[[dbo].[Sales]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_db')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "localTestFileServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"folderPath": "csv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/localTestFileServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DataSource1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connect to your data source store.",
+				"linkedServiceName": {
+					"referenceName": "GCUI1_Retail",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"structure": [
+					{
+						"name": "AttributeKey",
+						"type": "Int32"
+					},
+					{
+						"name": "AttributeName",
+						"type": "String"
+					},
+					{
+						"name": "AttributeDescription",
+						"type": "String"
+					},
+					{
+						"name": "EntityKey",
+						"type": "Int32"
+					},
+					{
+						"name": "EntityName",
+						"type": "String"
+					},
+					{
+						"name": "ModelName",
+						"type": "String"
+					}
+				],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "localTestFileServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"folderPath": "csv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/localTestFileServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_2xk')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "houston_framework_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureDataLakeStoreFile",
+				"typeProperties": {
+					"fileName": "[parameters('DestinationDataset_2xk_properties_typeProperties_fileName')]",
+					"folderPath": "[parameters('DestinationDataset_2xk_properties_typeProperties_folderPath')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_qzm')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "houston_framework_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"cw_fileName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureDataLakeStoreFile",
+				"typeProperties": {
+					"format": {
+						"type": "JsonFormat",
+						"filePattern": "setOfObjects"
+					},
+					"fileName": {
+						"value": "[parameters('DestinationDataset_qzm_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": "[parameters('DestinationDataset_qzm_properties_typeProperties_folderPath')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_we5')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "houston_framework_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureDataLakeStoreFile",
+				"typeProperties": {
+					"format": {
+						"type": "JsonFormat",
+						"filePattern": "setOfObjects"
+					},
+					"fileName": "[parameters('DestinationDataset_we5_properties_typeProperties_fileName')]",
+					"folderPath": "[parameters('DestinationDataset_we5_properties_typeProperties_folderPath')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GCUI01_Retail_sales')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "GCUI1_Retail",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "SalesOrderNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SalesOrderLineNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "OrderDate",
+						"type": "date"
+					},
+					{
+						"name": "StoreID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ProductID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SalesQuantity",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "UnitPrice",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "UnitCost",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "SalesAmount",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "CreatedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "UpdatedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"tableName": "[[dbo].[Sales]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SomeData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "houston_framework_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureDataLakeStoreLocation",
+						"fileName": "retailSale",
+						"folderPath": "houstonframeworkdemo"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_JSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "localTestFileServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "FileShare",
+				"typeProperties": {
+					"fileName": "[parameters('SourceDataset_JSON_properties_typeProperties_fileName')]",
+					"folderPath": "[parameters('SourceDataset_JSON_properties_typeProperties_folderPath')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/localTestFileServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_qzm')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "GCUI1_Retail",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "SalesOrderNumber",
+						"type": "nvarchar",
+						"precision": 255,
+						"scale": 255
+					},
+					{
+						"name": "SalesOrderLineNumber",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "OrderDate",
+						"type": "date",
+						"precision": 255,
+						"scale": 255
+					},
+					{
+						"name": "StoreID",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "ProductID",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "SalesQuantity",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "UnitPrice",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "UnitCost",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "SalesAmount",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "CreatedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "UpdatedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_ve9')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "GCUI1_Retail",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "SalesOrderNumber",
+						"type": "nvarchar",
+						"precision": 255,
+						"scale": 255
+					},
+					{
+						"name": "SalesOrderLineNumber",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "OrderDate",
+						"type": "date",
+						"precision": 255,
+						"scale": 255
+					},
+					{
+						"name": "StoreID",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "ProductID",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "SalesQuantity",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "UnitPrice",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "UnitCost",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "SalesAmount",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "CreatedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "UpdatedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"tableName": "[[dbo].[Sales]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_we5')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "GCUI1_Retail",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Sales"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GCUI01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('GCUI01_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime2",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GCUI1_Retail')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('GCUI1_Retail_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime2",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/houston_framework_ADLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDataLakeStore",
+				"typeProperties": {
+					"dataLakeStoreUri": "[parameters('houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri')]",
+					"servicePrincipalId": "[parameters('houston_framework_ADLS_properties_typeProperties_servicePrincipalId')]",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('houston_framework_ADLS_servicePrincipalKey')]"
+					},
+					"tenant": "[parameters('houston_framework_ADLS_properties_typeProperties_tenant')]",
+					"subscriptionId": "[parameters('houston_framework_ADLS_properties_typeProperties_subscriptionId')]",
+					"resourceGroupName": "[parameters('houston_framework_ADLS_properties_typeProperties_resourceGroupName')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/houston_framework_Databricks')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://eastus.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('houston_framework_Databricks_accessToken')]"
+					},
+					"existingClusterId": "0813-183019-mas126"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/houston_framework_db')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('houston_framework_db_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/localTestFileServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('localTestFileServer_properties_typeProperties_host')]",
+					"userId": "[parameters('localTestFileServer_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('localTestFileServer_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime2",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime2')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime3')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntimeGCUI01')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/selfHostedIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/run_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Daily schedule to migrate, etl, and analyze the data from on Premise to the cloud",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "CopyData_from_RetailOnPre_to_ADLS",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2019-08-23T19:00:00.000Z",
+						"timeZone": "UTC",
+						"schedule": {}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/CopyData_from_RetailOnPre_to_ADLS')]"
+			]
+		}
+	]
+}
