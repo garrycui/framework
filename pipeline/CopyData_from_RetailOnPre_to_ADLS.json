@@ -149,7 +149,7 @@
 				]
 			},
 			{
-				"name": "data-Transformation",
+				"name": "data-ETL",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
