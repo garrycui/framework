@@ -180,7 +180,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/gary.cui@neudesic.com/houston-framework-demo"
+					"notebookPath": "/Users/gary.cui@neudesic.com/main"
 				},
 				"linkedServiceName": {
 					"referenceName": "houston_framework_Databricks",
