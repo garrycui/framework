@@ -834,8 +834,9 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2019-09-20T14:35:00.000Z",
-						"timeZone": "UTC"
+						"startTime": "2019-09-20T16:32:00.000Z",
+						"timeZone": "UTC",
+						"schedule": {}
 					}
 				}
 			},
