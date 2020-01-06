@@ -1,0 +1,6 @@
+{
+	"name": "integrationRuntime-garynewlaptop",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
