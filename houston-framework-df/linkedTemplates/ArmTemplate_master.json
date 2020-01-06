@@ -4,7 +4,7 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory Name",
+			"metadata": "Data Factory name",
 			"defaultValue": "houston-framework-df"
 		},
 		"GCUI01_connectionString": {
@@ -101,7 +101,7 @@
 		},
 		"localTestFileServer_properties_typeProperties_host": {
 			"type": "string",
-			"defaultValue": "C:\\Users\\Gary.Cui\\Desktop\\Main\\Framework\\data\\"
+			"defaultValue": "C:\\Users\\gary.cui\\Desktop\\main\\framework\\data\\"
 		},
 		"localTestFileServer_properties_typeProperties_userId": {
 			"type": "string",
@@ -113,7 +113,7 @@
 		},
 		"containerSasToken": {
 			"type": "string",
-			"metadata": "Sas Token to storage account containing linked ARM templates"
+			"metadata": "Sas token to storage account containing linked ARM templates"
 		}
 	},
 	"variables": {

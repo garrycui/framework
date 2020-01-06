@@ -4,7 +4,7 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory Name",
+			"metadata": "Data Factory name",
 			"defaultValue": "houston-framework-df"
 		},
 		"GCUI01_connectionString": {
@@ -101,7 +101,7 @@
 		},
 		"localTestFileServer_properties_typeProperties_host": {
 			"type": "string",
-			"defaultValue": "C:\\Users\\Gary.Cui\\Desktop\\Main\\Framework\\data\\"
+			"defaultValue": "C:\\Users\\gary.cui\\Desktop\\main\\framework\\data\\"
 		},
 		"localTestFileServer_properties_typeProperties_userId": {
 			"type": "string",
@@ -751,8 +751,7 @@
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "FileServerLocation",
-						"folderPath": "csv"
+						"type": "FileServerLocation"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -1567,7 +1566,7 @@
 						"type": "SecureString",
 						"value": "[parameters('houston_framework_Databricks_accessToken')]"
 					},
-					"existingClusterId": "0813-183019-mas126"
+					"existingClusterId": "0106-160056-sap34"
 				}
 			},
 			"dependsOn": []
@@ -1601,12 +1600,12 @@
 					}
 				},
 				"connectVia": {
-					"referenceName": "integrationRuntime2",
+					"referenceName": "integrationRuntime-garynewlaptop",
 					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-garynewlaptop')]"
 			]
 		},
 		{
@@ -1641,16 +1640,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/integrationRuntime2')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -1661,27 +1650,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntime3')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntimeGCUI01')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/selfHostedIntegrationRuntime')]",
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime-garynewlaptop')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
 			"properties": {
