@@ -7,7 +7,7 @@
 		"typeProperties": {
 			"host": "C:\\Users\\Gary.Cui\\Desktop\\Main\\Framework\\data\\",
 			"userId": "gary.cui@neudesic.com",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJjZWRiNWIzOC0xMGNkLTQ3MmItYjY5YS1jMTNkMTNhZWJiYWMiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI0NWQ4ODA0Yy04OWQ2LTQ4ZmMtOWIzOC02MTBiOGQwMmRkMmIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "integrationRuntime-garynewlaptop",
