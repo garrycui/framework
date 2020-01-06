@@ -751,7 +751,8 @@
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "FileServerLocation"
+						"type": "FileServerLocation",
+						"fileName": "city_price.csv"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -1640,7 +1641,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntime2')]",
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime-garynewlaptop')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1650,7 +1651,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntime-garynewlaptop')]",
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime2')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
 			"properties": {
