@@ -116,14 +116,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"windowStart": {
-				"type": "String"
-			},
-			"windowEnd": {
-				"type": "String"
-			}
-		},
 		"annotations": []
 	}
 }

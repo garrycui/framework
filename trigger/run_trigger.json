@@ -10,6 +10,12 @@
 					"referenceName": "CopyData_from_RetailOnPre_to_ADLS",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "Framework_Demo",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
@@ -17,7 +23,7 @@
 			"recurrence": {
 				"frequency": "Day",
 				"interval": 1,
-				"startTime": "2019-09-20T17:05:00.000Z",
+				"startTime": "2020-01-10T17:50:00.000Z",
 				"timeZone": "UTC"
 			}
 		}
