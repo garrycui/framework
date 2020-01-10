@@ -622,7 +622,7 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2020-01-10T17:50:00.000Z",
+						"startTime": "2020-01-10T19:15:00.000Z",
 						"timeZone": "UTC",
 						"schedule": {}
 					}
