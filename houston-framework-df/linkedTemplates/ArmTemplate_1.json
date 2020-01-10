@@ -608,6 +608,13 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Framework_Demo",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -615,13 +622,15 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2019-09-20T17:05:00.000Z",
-						"timeZone": "UTC"
+						"startTime": "2020-01-10T17:50:00.000Z",
+						"timeZone": "UTC",
+						"schedule": {}
 					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/CopyData_from_RetailOnPre_to_ADLS')]"
+				"[concat(variables('factoryId'), '/pipelines/CopyData_from_RetailOnPre_to_ADLS')]",
+				"[concat(variables('factoryId'), '/pipelines/Framework_Demo')]"
 			]
 		}
 	]
