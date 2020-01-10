@@ -626,12 +626,12 @@
 					"connectionString": "[parameters('GCUI1_Retail_connectionString')]"
 				},
 				"connectVia": {
-					"referenceName": "integrationRuntime2",
+					"referenceName": "integrationRuntime-garynewlaptop",
 					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-garynewlaptop')]"
 			]
 		},
 		{

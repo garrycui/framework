@@ -581,7 +581,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/gary.cui@neudesic.com/Pop vs. Price SQL"
+							"notebookPath": "/Users/gary.cui@neudesic.com/main_Analytics"
 						},
 						"linkedServiceName": {
 							"referenceName": "houston_framework_Databricks",
@@ -589,14 +589,6 @@
 						}
 					}
 				],
-				"parameters": {
-					"windowStart": {
-						"type": "String"
-					},
-					"windowEnd": {
-						"type": "String"
-					}
-				},
 				"annotations": []
 			},
 			"dependsOn": []

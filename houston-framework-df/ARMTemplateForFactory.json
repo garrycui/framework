@@ -462,7 +462,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/gary.cui@neudesic.com/Pop vs. Price SQL"
+							"notebookPath": "/Users/gary.cui@neudesic.com/main_Analytics"
 						},
 						"linkedServiceName": {
 							"referenceName": "houston_framework_Databricks",
@@ -470,14 +470,6 @@
 						}
 					}
 				],
-				"parameters": {
-					"windowStart": {
-						"type": "String"
-					},
-					"windowEnd": {
-						"type": "String"
-					}
-				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1590,12 +1582,12 @@
 					"connectionString": "[parameters('GCUI1_Retail_connectionString')]"
 				},
 				"connectVia": {
-					"referenceName": "integrationRuntime2",
+					"referenceName": "integrationRuntime-garynewlaptop",
 					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-garynewlaptop')]"
 			]
 		},
 		{
