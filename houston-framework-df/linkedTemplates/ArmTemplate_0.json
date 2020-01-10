@@ -190,7 +190,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureDataLakeStoreLocation",
-						"folderPath": "framework"
+						"folderPath": "framework/price"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
