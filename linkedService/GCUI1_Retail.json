@@ -5,11 +5,11 @@
 		"annotations": [],
 		"type": "SqlServer",
 		"typeProperties": {
-			"connectionString": "integrated security=False;data source=GCUI01;initial catalog=Retail;user id=sa",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIyNjZjODkyZS03YTEyLTQzYTItODNmYi0zNWFiOWEwZWZiMTQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"connectionString": "integrated security=False;data source=GCUI02;initial catalog=Retail;user id=sa",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI1Yjk1ODg2NS0wYzE3LTQ1NmEtYmUxNS0xMmM5M2U4MjY5MDEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
-			"referenceName": "integrationRuntime2",
+			"referenceName": "integrationRuntime-garynewlaptop",
 			"type": "IntegrationRuntimeReference"
 		}
 	}
