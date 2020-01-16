@@ -1,0 +1,38 @@
+{
+	"name": "PBI_passDescription",
+	"properties": {
+		"activities": [
+			{
+				"name": "passDescription",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[passDescription]",
+					"storedProcedureParameters": {
+						"DATABASE": {
+							"value": "retail",
+							"type": "String"
+						},
+						"TABLE": {
+							"value": "dvd_loan",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "houston_framework_db",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
