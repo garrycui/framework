@@ -101,7 +101,7 @@
 		},
 		"localTestFileServer_properties_typeProperties_host": {
 			"type": "string",
-			"defaultValue": "C:\\Users\\gary.cui\\Desktop\\main\\framework\\data\\"
+			"defaultValue": "C:\\Users\\gary.cui\\Desktop\\main\\"
 		},
 		"localTestFileServer_properties_typeProperties_userId": {
 			"type": "string",
