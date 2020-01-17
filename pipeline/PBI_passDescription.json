@@ -33,7 +33,7 @@
 				}
 			},
 			{
-				"name": "copyDatafromOnPretoADL",
+				"name": "CSVonPretoADL",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -45,6 +45,17 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
@@ -58,9 +69,15 @@
 					},
 					"enableStaging": false
 				},
+				"inputs": [
+					{
+						"referenceName": "PandasProfiling",
+						"type": "DatasetReference"
+					}
+				],
 				"outputs": [
 					{
-						"referenceName": "ADLS_pandasprofiling",
+						"referenceName": "ADLS_pandasProfiling",
 						"type": "DatasetReference"
 					}
 				]
