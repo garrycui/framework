@@ -1,5 +1,5 @@
 {
-	"name": "PandasProfiling",
+	"name": "OnPre_PandasProfiling",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "localTestFileServer",
