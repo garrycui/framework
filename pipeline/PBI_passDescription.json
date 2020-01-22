@@ -5,7 +5,14 @@
 			{
 				"name": "passDescription",
 				"type": "SqlServerStoredProcedure",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "ADLtoSQLSERVER",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -71,16 +78,36 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "PandasProfiling",
+						"referenceName": "OnPre_PandasProfiling",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ADLS_pandasProfiling",
+						"referenceName": "ADLS_pandasprofiling",
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "ADLtoSQLSERVER",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "CSVonPretoADL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": []
 			}
 		],
 		"annotations": []
