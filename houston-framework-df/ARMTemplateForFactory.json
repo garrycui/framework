@@ -110,6 +110,10 @@
 		"localTestFileServer_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "gary.cui@neudesic.com"
+		},
+		"profiling_Blob_Trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/81822429-5727-4170-bd34-6a1e0e8a9957/resourceGroups/neu_hou_data_framework/providers/Microsoft.Storage/storageAccounts/houstonframeworksa"
 		}
 	},
 	"variables": {
@@ -2457,6 +2461,37 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/profiling_Blob_Trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "When a new csv file is put into the profiling blob, the pipeline gets triggered and run.",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PBI_passDescription",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/houston-framework/blobs/profiling/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('profiling_Blob_Trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PBI_passDescription')]"
+			]
 		}
 	]
 }

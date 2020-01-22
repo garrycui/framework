@@ -111,6 +111,10 @@
 			"type": "string",
 			"defaultValue": "gary.cui@neudesic.com"
 		},
+		"profiling_Blob_Trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/81822429-5727-4170-bd34-6a1e0e8a9957/resourceGroups/neu_hou_data_framework/providers/Microsoft.Storage/storageAccounts/houstonframeworksa"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -233,6 +237,9 @@
 					},
 					"SourceDataset_JSON_properties_typeProperties_folderPath": {
 						"value": "[parameters('SourceDataset_JSON_properties_typeProperties_folderPath')]"
+					},
+					"profiling_Blob_Trigger_properties_typeProperties_scope": {
+						"value": "[parameters('profiling_Blob_Trigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
