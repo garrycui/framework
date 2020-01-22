@@ -33,7 +33,7 @@
 						},
 						"TABLE": {
 							"value": {
-								"value": "@activity('ADLv2toSQLSERVER').output",
+								"value": "@pipeline().parameters.TABLE",
 								"type": "Expression"
 							},
 							"type": "String"
@@ -96,7 +96,7 @@
 						},
 						"TABLE": {
 							"value": {
-								"value": "@activity('ADLv2toSQLSERVER').output",
+								"value": "@pipeline().parameters.TABLE",
 								"type": "Expression"
 							},
 							"type": "String"
@@ -139,7 +139,7 @@
 						},
 						"TABLE": {
 							"value": {
-								"value": "@activity('ADLv2toSQLSERVER').output",
+								"value": "@pipeline().parameters.TABLE",
 								"type": "Expression"
 							},
 							"type": "String"
@@ -160,6 +160,10 @@
 			"SCHEMA": {
 				"type": "string",
 				"defaultValue": "dbo"
+			},
+			"TABLE": {
+				"type": "string",
+				"defaultValue": "Tweets"
 			}
 		},
 		"annotations": []
