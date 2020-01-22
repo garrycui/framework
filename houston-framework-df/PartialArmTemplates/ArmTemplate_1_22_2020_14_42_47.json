@@ -1,0 +1,190 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "houston-framework-df"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/PBI_passDescription')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "passDescription",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "ADLv2toSQLSERVER",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[passDescription]",
+							"storedProcedureParameters": {
+								"DATABASE": {
+									"value": {
+										"value": "@pipeline().parameters.DATABASE",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ADLv2toSQLSERVER",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation"
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_Databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "passDistinctAll",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "passDescription",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[countDistinctAll]",
+							"storedProcedureParameters": {
+								"SCHEMA": {
+									"value": {
+										"value": "@pipeline().parameters.SCHEMA",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "countDistinctIndividual",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "passDistinctAll",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[countDistinctIndividual]",
+							"storedProcedureParameters": {
+								"SCHEMA": {
+									"value": {
+										"value": "@pipeline().parameters.SCHEMA",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"parameters": {
+					"DATABASE": {
+						"type": "string",
+						"defaultValue": "retail"
+					},
+					"SCHEMA": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"TABLE": {
+						"type": "string",
+						"defaultValue": "Tweets"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}

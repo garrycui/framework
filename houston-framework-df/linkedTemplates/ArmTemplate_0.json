@@ -223,13 +223,16 @@
 							"storedProcedureParameters": {
 								"DATABASE": {
 									"value": {
-										"value": "@ADLv2toSQLSERVER.parameters.DATABASE",
+										"value": "@pipeline().parameters.DATABASE",
 										"type": "Expression"
 									},
 									"type": "String"
 								},
 								"TABLE": {
-									"value": "Tweets",
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
 									"type": "String"
 								}
 							}
@@ -252,12 +255,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation",
-							"baseParameters": {
-								"DATABASE": "retail",
-								"TABLE": "Tweets",
-								"SCHEMA": "dbo"
-							}
+							"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation"
 						},
 						"linkedServiceName": {
 							"referenceName": "houston_framework_Databricks",
@@ -287,11 +285,17 @@
 							"storedProcedureName": "[[dbo].[countDistinctAll]",
 							"storedProcedureParameters": {
 								"SCHEMA": {
-									"value": "dbo",
+									"value": {
+										"value": "@pipeline().parameters.SCHEMA",
+										"type": "Expression"
+									},
 									"type": "String"
 								},
 								"TABLE": {
-									"value": "Tweets",
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
 									"type": "String"
 								}
 							}
@@ -324,11 +328,17 @@
 							"storedProcedureName": "[[dbo].[countDistinctIndividual]",
 							"storedProcedureParameters": {
 								"SCHEMA": {
-									"value": "dbo",
+									"value": {
+										"value": "@pipeline().parameters.SCHEMA",
+										"type": "Expression"
+									},
 									"type": "String"
 								},
 								"TABLE": {
-									"value": "Tweets",
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
 									"type": "String"
 								}
 							}
@@ -339,6 +349,20 @@
 						}
 					}
 				],
+				"parameters": {
+					"DATABASE": {
+						"type": "string",
+						"defaultValue": "retail"
+					},
+					"SCHEMA": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"TABLE": {
+						"type": "string",
+						"defaultValue": "Tweets"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
