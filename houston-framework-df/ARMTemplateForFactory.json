@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "houston-framework-df"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
 		"GCUI01_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'GCUI01'"
@@ -487,7 +491,14 @@
 					{
 						"name": "passDescription",
 						"type": "SqlServerStoredProcedure",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "ADLv2toSQLSERVER",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -504,7 +515,7 @@
 									"type": "String"
 								},
 								"TABLE": {
-									"value": "dvd_loan",
+									"value": "Tweets",
 									"type": "String"
 								}
 							}
@@ -515,8 +526,8 @@
 						}
 					},
 					{
-						"name": "CSVonPretoADL",
-						"type": "Copy",
+						"name": "ADLv2toSQLSERVER",
+						"type": "DatabricksNotebook",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
@@ -527,52 +538,93 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "FileServerReadSettings",
-									"recursive": true,
-									"wildcardFileName": "*"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureDataLakeStoreWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false
+							"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation"
 						},
-						"inputs": [
+						"linkedServiceName": {
+							"referenceName": "houston_framework_Databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "passDistinctAll",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
 							{
-								"referenceName": "PandasProfiling",
-								"type": "DatasetReference",
-								"parameters": {}
+								"activity": "passDescription",
+								"dependencyConditions": [
+									"Succeeded"
+								]
 							}
 						],
-						"outputs": [
-							{
-								"referenceName": "ADLS_pandasprofiling",
-								"type": "DatasetReference",
-								"parameters": {}
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[countDistinctAll]",
+							"storedProcedureParameters": {
+								"SCHEMA": {
+									"value": "dbo",
+									"type": "String"
+								},
+								"TABLE": {
+									"value": "Tweets",
+									"type": "String"
+								}
 							}
-						]
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "countDistinctIndividual",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "passDistinctAll",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[countDistinctIndividual]",
+							"storedProcedureParameters": {
+								"SCHEMA": {
+									"value": "dbo",
+									"type": "String"
+								},
+								"TABLE": {
+									"value": "Tweets",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/houston_framework_db')]",
-				"[concat(variables('factoryId'), '/datasets/PandasProfiling')]",
-				"[concat(variables('factoryId'), '/datasets/ADLS_pandasprofiling')]"
+				"[concat(variables('factoryId'), '/linkedServices/houston_framework_Databricks')]"
 			]
 		},
 		{
@@ -1425,7 +1477,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PandasProfiling')]",
+			"name": "[concat(parameters('factoryName'), '/OnPre_PandasProfiling')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2187,6 +2239,19 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/GCUI01')]",

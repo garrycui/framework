@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "houston-framework-df"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
 		"GCUI01_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'GCUI01'"
@@ -133,6 +137,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
 					},
 					"houston_framework_ADLS_servicePrincipalKey": {
 						"value": "[parameters('houston_framework_ADLS_servicePrincipalKey')]"

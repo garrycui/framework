@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "houston-framework-df"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
 		"GCUI01_connectionString": {
 			"value": ""
 		},
