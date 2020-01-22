@@ -7,7 +7,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "ADLtoSQLSERVER",
+						"activity": "ADLv2toSQLSERVER",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -40,7 +40,7 @@
 				}
 			},
 			{
-				"name": "ADLtoSQLSERVER",
+				"name": "ADLv2toSQLSERVER",
 				"type": "DatabricksNotebook",
 				"dependsOn": [],
 				"policy": {
@@ -50,7 +50,14 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation"
+				},
+				"linkedServiceName": {
+					"referenceName": "houston_framework_Databricks",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"annotations": []
