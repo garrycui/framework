@@ -25,7 +25,10 @@
 					"storedProcedureName": "[dbo].[passDescription]",
 					"storedProcedureParameters": {
 						"DATABASE": {
-							"value": "retail",
+							"value": {
+								"value": "@ADLv2toSQLSERVER.parameters.DATABASE",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"TABLE": {
@@ -52,7 +55,12 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation"
+					"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation",
+					"baseParameters": {
+						"DATABASE": "retail",
+						"TABLE": "Tweets",
+						"SCHEMA": "dbo"
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "houston_framework_Databricks",
