@@ -497,7 +497,7 @@
 						"type": "SqlServerStoredProcedure",
 						"dependsOn": [
 							{
-								"activity": "ADLv2toSQLSERVER",
+								"activity": "Set variable1",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -640,6 +640,26 @@
 							"referenceName": "houston_framework_db",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ADLv2toSQLSERVER",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "TableName",
+							"value": {
+								"value": "@activity('ADLv2toSQLSERVER').output",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"parameters": {
@@ -654,6 +674,11 @@
 					"TABLE": {
 						"type": "string",
 						"defaultValue": "Tweets"
+					}
+				},
+				"variables": {
+					"TableName": {
+						"type": "String"
 					}
 				},
 				"annotations": []
@@ -2404,6 +2429,37 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/profiling_Blob_Trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "When a new csv file is put into the profiling blob, the pipeline gets triggered and run.",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PBI_passDescription",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/houston-framework/blobs/profiling/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('profiling_Blob_Trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PBI_passDescription')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/run_trigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -2461,37 +2517,6 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/profiling_Blob_Trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "When a new csv file is put into the profiling blob, the pipeline gets triggered and run.",
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "PBI_passDescription",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/houston-framework/blobs/profiling/",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('profiling_Blob_Trigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/PBI_passDescription')]"
-			]
 		}
 	]
 }

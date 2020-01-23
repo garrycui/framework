@@ -204,7 +204,7 @@
 						"type": "SqlServerStoredProcedure",
 						"dependsOn": [
 							{
-								"activity": "ADLv2toSQLSERVER",
+								"activity": "Set variable1",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -347,6 +347,26 @@
 							"referenceName": "houston_framework_db",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ADLv2toSQLSERVER",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "TableName",
+							"value": {
+								"value": "@activity('ADLv2toSQLSERVER').output",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"parameters": {
@@ -361,6 +381,11 @@
 					"TABLE": {
 						"type": "string",
 						"defaultValue": "Tweets"
+					}
+				},
+				"variables": {
+					"TableName": {
+						"type": "String"
 					}
 				},
 				"annotations": []
