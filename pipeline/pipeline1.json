@@ -34,8 +34,33 @@
 						"type": "DelimitedTextReadSettings"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get BlobNewFileName",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "table",
+					"value": {
+						"value": "@activity('Get BlobNewFileName').output.itemName",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"variables": {
+			"table": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
