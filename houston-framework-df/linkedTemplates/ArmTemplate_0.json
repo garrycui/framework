@@ -344,7 +344,7 @@
 					},
 					"TABLE": {
 						"type": "string",
-						"defaultValue": "Tweets"
+						"defaultValue": "city_price2"
 					}
 				},
 				"variables": {
