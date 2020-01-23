@@ -7,7 +7,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "ADLv2toSQLSERVER",
+						"activity": "Set variable1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
