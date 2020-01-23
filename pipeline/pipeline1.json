@@ -50,7 +50,7 @@
 				"typeProperties": {
 					"variableName": "table",
 					"value": {
-						"value": "@activity('Get BlobNewFileName').output.itemName",
+						"value": "@activity('Get BlobNewFileName').output.childItems",
 						"type": "Expression"
 					}
 				}
