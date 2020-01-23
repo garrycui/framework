@@ -163,7 +163,7 @@
 			},
 			"TABLE": {
 				"type": "string",
-				"defaultValue": "city_price2"
+				"defaultValue": "city_pricea"
 			}
 		},
 		"variables": {
