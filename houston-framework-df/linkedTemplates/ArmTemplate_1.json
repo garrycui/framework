@@ -7,6 +7,22 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "houston-framework-df"
 		},
+		"GCUI1_Retail_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'GCUI1_Retail'"
+		},
+		"localTestFileServer_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'localTestFileServer'"
+		},
+		"localTestFileServer_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\gary.cui\\Desktop\\main\\"
+		},
+		"localTestFileServer_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "gary.cui@neudesic.com"
+		},
 		"SourceDataset_JSON_properties_typeProperties_fileName": {
 			"type": "string",
 			"defaultValue": ""
@@ -24,6 +40,266 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/GCUI1_Retail')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('GCUI1_Retail_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime-garynewlaptop",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/localTestFileServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('localTestFileServer_properties_typeProperties_host')]",
+					"userId": "[parameters('localTestFileServer_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('localTestFileServer_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime-garynewlaptop",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get BlobNewFileName",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "Blob_profiling",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"modifiedDatetimeStart": {
+									"value": "@{getPastTime(5, 'Minute')}",
+									"type": "Expression"
+								}
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get BlobNewFileName",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "table",
+							"value": {
+								"value": "@activity('Get BlobNewFileName').output.childItems.name[0]",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"variables": {
+					"table": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "localTestFileServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "city_price.csv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/localTestFileServer')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DataSource1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -64,7 +340,9 @@
 				],
 				"typeProperties": {}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
@@ -212,7 +490,9 @@
 					}
 				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/localTestFileServer')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/GCUI01_Retail_sales')]",
@@ -294,7 +574,9 @@
 					"tableName": "[[dbo].[Sales]"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/OnPre_PandasProfiling')]",
@@ -804,7 +1086,9 @@
 					}
 				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/localTestFileServer')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_JSON')]",
@@ -822,7 +1106,9 @@
 					"folderPath": "[parameters('SourceDataset_JSON_properties_typeProperties_folderPath')]"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/localTestFileServer')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_qzm')]",
@@ -911,7 +1197,9 @@
 				],
 				"typeProperties": {}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_ve9')]",
@@ -1002,7 +1290,9 @@
 					"tableName": "[[dbo].[Sales]"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_we5')]",
@@ -1021,7 +1311,9 @@
 					"table": "Sales"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/profiling_Blob_Trigger')]",
@@ -1280,7 +1572,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/GCUI01_Retail_sales')]",
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_JSON')]"
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_JSON')]",
+				"[concat(variables('factoryId'), '/datasets/CSV')]"
 			]
 		},
 		{
@@ -1407,7 +1700,9 @@
 				],
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/CSV')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/run_trigger')]",

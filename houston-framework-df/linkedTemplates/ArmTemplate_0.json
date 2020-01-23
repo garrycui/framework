@@ -27,14 +27,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'GCUI01'"
 		},
-		"GCUI1_Retail_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'GCUI1_Retail'"
-		},
-		"localTestFileServer_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'localTestFileServer'"
-		},
 		"houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri": {
 			"type": "string",
 			"defaultValue": "https://houstonframeworkdl.azuredatalakestore.net/webhdfs/v1"
@@ -94,14 +86,6 @@
 		"DestinationDataset_we5_properties_typeProperties_folderPath": {
 			"type": "string",
 			"defaultValue": "houstonframeworkdemo"
-		},
-		"localTestFileServer_properties_typeProperties_host": {
-			"type": "string",
-			"defaultValue": "C:\\Users\\gary.cui\\Desktop\\main\\"
-		},
-		"localTestFileServer_properties_typeProperties_userId": {
-			"type": "string",
-			"defaultValue": "gary.cui@neudesic.com"
 		}
 	},
 	"variables": {
@@ -204,7 +188,7 @@
 						"type": "SqlServerStoredProcedure",
 						"dependsOn": [
 							{
-								"activity": "Set variable1",
+								"activity": "ADLv2toSQLSERVER",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -346,26 +330,6 @@
 						"linkedServiceName": {
 							"referenceName": "houston_framework_db",
 							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Set variable1",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "ADLv2toSQLSERVER",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "TableName",
-							"value": {
-								"value": "@activity('ADLv2toSQLSERVER').output",
-								"type": "Expression"
-							}
 						}
 					}
 				],
@@ -740,6 +704,179 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/BinaryDataDestinationStore')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connection to your data destination store.  ",
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"Container": {
+						"type": "string"
+					},
+					"Directory": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@dataset().Directory",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@dataset().Container",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BinaryDataSourceStore')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connection to your data source store. ",
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"Container": {
+						"type": "string"
+					},
+					"Directory": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@dataset().Directory",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@dataset().Container",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_profiling')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "profiling",
+						"container": "houston-framework"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Prop_0",
+						"type": "String"
+					},
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "track_name",
+						"type": "String"
+					},
+					{
+						"name": "size_bytes",
+						"type": "String"
+					},
+					{
+						"name": "currency",
+						"type": "String"
+					},
+					{
+						"name": "price",
+						"type": "String"
+					},
+					{
+						"name": "rating_count_tot",
+						"type": "String"
+					},
+					{
+						"name": "rating_count_ver",
+						"type": "String"
+					},
+					{
+						"name": "user_rating",
+						"type": "String"
+					},
+					{
+						"name": "user_rating_ver",
+						"type": "String"
+					},
+					{
+						"name": "ver",
+						"type": "String"
+					},
+					{
+						"name": "cont_rating",
+						"type": "String"
+					},
+					{
+						"name": "prime_genre",
+						"type": "String"
+					},
+					{
+						"name": "sup_devices.num",
+						"type": "String"
+					},
+					{
+						"name": "ipadSc_urls.num",
+						"type": "String"
+					},
+					{
+						"name": "lang.num",
+						"type": "String"
+					},
+					{
+						"name": "vpp_lic",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DestinationDataset_2xk')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -859,200 +996,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/GCUI1_Retail')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('GCUI1_Retail_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "integrationRuntime-garynewlaptop",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-garynewlaptop')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/localTestFileServer')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "FileServer",
-				"typeProperties": {
-					"host": "[parameters('localTestFileServer_properties_typeProperties_host')]",
-					"userId": "[parameters('localTestFileServer_properties_typeProperties_userId')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('localTestFileServer_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "integrationRuntime-garynewlaptop",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-garynewlaptop')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/CSV')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "localTestFileServer",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "FileServerLocation",
-						"fileName": "city_price.csv"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/localTestFileServer')]"
 			]
 		}
 	]

@@ -157,12 +157,6 @@
 					"GCUI01_connectionString": {
 						"value": "[parameters('GCUI01_connectionString')]"
 					},
-					"GCUI1_Retail_connectionString": {
-						"value": "[parameters('GCUI1_Retail_connectionString')]"
-					},
-					"localTestFileServer_password": {
-						"value": "[parameters('localTestFileServer_password')]"
-					},
 					"houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri": {
 						"value": "[parameters('houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri')]"
 					},
@@ -207,12 +201,6 @@
 					},
 					"DestinationDataset_we5_properties_typeProperties_folderPath": {
 						"value": "[parameters('DestinationDataset_we5_properties_typeProperties_folderPath')]"
-					},
-					"localTestFileServer_properties_typeProperties_host": {
-						"value": "[parameters('localTestFileServer_properties_typeProperties_host')]"
-					},
-					"localTestFileServer_properties_typeProperties_userId": {
-						"value": "[parameters('localTestFileServer_properties_typeProperties_userId')]"
 					}
 				}
 			},
@@ -231,6 +219,18 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"GCUI1_Retail_connectionString": {
+						"value": "[parameters('GCUI1_Retail_connectionString')]"
+					},
+					"localTestFileServer_password": {
+						"value": "[parameters('localTestFileServer_password')]"
+					},
+					"localTestFileServer_properties_typeProperties_host": {
+						"value": "[parameters('localTestFileServer_properties_typeProperties_host')]"
+					},
+					"localTestFileServer_properties_typeProperties_userId": {
+						"value": "[parameters('localTestFileServer_properties_typeProperties_userId')]"
 					},
 					"SourceDataset_JSON_properties_typeProperties_fileName": {
 						"value": "[parameters('SourceDataset_JSON_properties_typeProperties_fileName')]"

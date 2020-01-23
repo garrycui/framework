@@ -1,0 +1,433 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "houston-framework-df"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/PBI_passDescription')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "passDescription",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "ADLv2toSQLSERVER",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[passDescription]",
+							"storedProcedureParameters": {
+								"DATABASE": {
+									"value": {
+										"value": "@pipeline().parameters.DATABASE",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ADLv2toSQLSERVER",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation"
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_Databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "passDistinctAll",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "passDescription",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[countDistinctAll]",
+							"storedProcedureParameters": {
+								"SCHEMA": {
+									"value": {
+										"value": "@pipeline().parameters.SCHEMA",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "countDistinctIndividual",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "passDistinctAll",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[countDistinctIndividual]",
+							"storedProcedureParameters": {
+								"SCHEMA": {
+									"value": {
+										"value": "@pipeline().parameters.SCHEMA",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@pipeline().parameters.TABLE",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"parameters": {
+					"DATABASE": {
+						"type": "string",
+						"defaultValue": "retail"
+					},
+					"SCHEMA": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"TABLE": {
+						"type": "string",
+						"defaultValue": "Tweets"
+					}
+				},
+				"variables": {
+					"TableName": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get BlobNewFileName",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "Blob_profiling",
+								"type": "DatasetReference"
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"modifiedDatetimeStart": {
+									"value": "@{getPastTime(5, 'Minute')}",
+									"type": "Expression"
+								}
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get BlobNewFileName",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "table",
+							"value": {
+								"value": "@activity('Get BlobNewFileName').output.childItems.name[0]",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"variables": {
+					"table": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Blob_profiling')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BinaryDataDestinationStore')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connection to your data destination store.  ",
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"Container": {
+						"type": "string"
+					},
+					"Directory": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@dataset().Directory",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@dataset().Container",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BinaryDataSourceStore')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connection to your data source store. ",
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"Container": {
+						"type": "string"
+					},
+					"Directory": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@dataset().Directory",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@dataset().Container",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_profiling')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "profiling",
+						"container": "houston-framework"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Prop_0",
+						"type": "String"
+					},
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "track_name",
+						"type": "String"
+					},
+					{
+						"name": "size_bytes",
+						"type": "String"
+					},
+					{
+						"name": "currency",
+						"type": "String"
+					},
+					{
+						"name": "price",
+						"type": "String"
+					},
+					{
+						"name": "rating_count_tot",
+						"type": "String"
+					},
+					{
+						"name": "rating_count_ver",
+						"type": "String"
+					},
+					{
+						"name": "user_rating",
+						"type": "String"
+					},
+					{
+						"name": "user_rating_ver",
+						"type": "String"
+					},
+					{
+						"name": "ver",
+						"type": "String"
+					},
+					{
+						"name": "cont_rating",
+						"type": "String"
+					},
+					{
+						"name": "prime_genre",
+						"type": "String"
+					},
+					{
+						"name": "sup_devices.num",
+						"type": "String"
+					},
+					{
+						"name": "ipadSc_urls.num",
+						"type": "String"
+					},
+					{
+						"name": "lang.num",
+						"type": "String"
+					},
+					{
+						"name": "vpp_lic",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		}
+	]
+}
