@@ -26,7 +26,7 @@
 						"type": "AzureBlobStorageReadSettings",
 						"recursive": true,
 						"modifiedDatetimeStart": {
-							"value": "@{getPastTime(1, 'Minute')}",
+							"value": "@{getPastTime(5, 'Minute')}",
 							"type": "Expression"
 						}
 					},
@@ -50,7 +50,7 @@
 				"typeProperties": {
 					"variableName": "table",
 					"value": {
-						"value": "@activity('Get BlobNewFileName').output.childItems",
+						"value": "@activity('Get BlobNewFileName').output.childItems.name[0]",
 						"type": "Expression"
 					}
 				}
