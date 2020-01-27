@@ -240,7 +240,7 @@
 				"typeProperties": {
 					"variableName": "TableName",
 					"value": {
-						"value": "@variables('TableNames').first()",
+						"value": "@variables('TableNames')[0]",
 						"type": "Expression"
 					}
 				}
