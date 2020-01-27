@@ -217,7 +217,7 @@
 							"typeProperties": {
 								"variableName": "TableNames",
 								"value": {
-									"value": "@string(item().name.replace('.csv',''))",
+									"value": "@string(item().name)",
 									"type": "Expression"
 								}
 							}
