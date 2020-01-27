@@ -33,7 +33,7 @@
 						},
 						"TABLE": {
 							"value": {
-								"value": "@pipeline().parameters.TABLE",
+								"value": "@variables('TableName')",
 								"type": "Expression"
 							},
 							"type": "String"
@@ -48,7 +48,14 @@
 			{
 				"name": "ADLv2toSQLSERVER",
 				"type": "DatabricksNotebook",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable Table Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -96,7 +103,7 @@
 						},
 						"TABLE": {
 							"value": {
-								"value": "@pipeline().parameters.TABLE",
+								"value": "@variables('TableName')",
 								"type": "Expression"
 							},
 							"type": "String"
@@ -139,7 +146,7 @@
 						},
 						"TABLE": {
 							"value": {
-								"value": "@pipeline().parameters.TABLE",
+								"value": "@variables('TableName')",
 								"type": "Expression"
 							},
 							"type": "String"
@@ -208,7 +215,7 @@
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "TableName",
+								"variableName": "TableNames",
 								"value": {
 									"value": "@string(item().name.replace('.csv',''))",
 									"type": "Expression"
@@ -216,6 +223,26 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Set variable Table Name",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEachNewBlobFile",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "TableName",
+					"value": {
+						"value": "@variables('TableNames').first()",
+						"type": "Expression"
+					}
 				}
 			}
 		],
@@ -234,8 +261,11 @@
 			}
 		},
 		"variables": {
-			"TableName": {
+			"TableNames": {
 				"type": "Array"
+			},
+			"TableName": {
+				"type": "String"
 			}
 		},
 		"annotations": []
