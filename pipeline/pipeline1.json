@@ -65,7 +65,7 @@
 		],
 		"variables": {
 			"table": {
-				"type": "String"
+				"type": "Array"
 			}
 		},
 		"annotations": []
