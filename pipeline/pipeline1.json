@@ -36,8 +36,8 @@
 				}
 			},
 			{
-				"name": "Set variable1",
-				"type": "SetVariable",
+				"name": "ForEach1",
+				"type": "ForEach",
 				"dependsOn": [
 					{
 						"activity": "Get BlobNewFileName",
@@ -48,11 +48,18 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "table",
-					"value": {
-						"value": "@activity('Get BlobNewFileName').output.childItems.name[0]",
+					"items": {
+						"value": "@activity('Get BlobNewFileName').output.childItems",
 						"type": "Expression"
-					}
+					},
+					"activities": [
+						{
+							"name": "Append variable1",
+							"type": "AppendVariable",
+							"dependsOn": [],
+							"userProperties": []
+						}
+					]
 				}
 			}
 		],
