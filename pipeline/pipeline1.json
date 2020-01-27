@@ -57,7 +57,14 @@
 							"name": "Append variable1",
 							"type": "AppendVariable",
 							"dependsOn": [],
-							"userProperties": []
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "table",
+								"value": {
+									"value": "@concat('1',item().name)",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
