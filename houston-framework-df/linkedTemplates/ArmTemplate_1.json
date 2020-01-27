@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "houston-framework-df"
 		},
-		"GCUI1_Retail_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'GCUI1_Retail'"
-		},
 		"localTestFileServer_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'localTestFileServer'"
@@ -41,23 +37,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/GCUI1_Retail')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('GCUI1_Retail_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "integrationRuntime-garynewlaptop",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/localTestFileServer')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -76,6 +55,283 @@
 					"referenceName": "integrationRuntime-garynewlaptop",
 					"type": "IntegrationRuntimeReference"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PBI_passDescription')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "passDescription",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "ADLv2toSQLSERVER",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[passDescription]",
+							"storedProcedureParameters": {
+								"DATABASE": {
+									"value": {
+										"value": "@pipeline().parameters.DATABASE",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@variables('TableName')",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ADLv2toSQLSERVER",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Set variable Table Name",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/gary.cui@neudesic.com/DEMOs/PandasProfiling/profilingTableCreation"
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_Databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "passDistinctAll",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "passDescription",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[countDistinctAll]",
+							"storedProcedureParameters": {
+								"SCHEMA": {
+									"value": {
+										"value": "@pipeline().parameters.SCHEMA",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@variables('TableName')",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "countDistinctIndividual",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "passDistinctAll",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[countDistinctIndividual]",
+							"storedProcedureParameters": {
+								"SCHEMA": {
+									"value": {
+										"value": "@pipeline().parameters.SCHEMA",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TABLE": {
+									"value": {
+										"value": "@variables('TableName')",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "houston_framework_db",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Get NewFiles",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "Blob_profiling",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"modifiedDatetimeStart": {
+									"value": "@{getPastTime(1,'Minute')}",
+									"type": "Expression"
+								}
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEachNewBlobFile",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get NewFiles",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get NewFiles').output.childitems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Set variable tableName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "TableNames",
+										"value": {
+											"value": "@string(item().name.replace('.csv',''))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Set variable Table Name",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ForEachNewBlobFile",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "TableName",
+							"value": {
+								"value": "@variables('TableNames').first()",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"DATABASE": {
+						"type": "string",
+						"defaultValue": "retail"
+					},
+					"SCHEMA": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"TABLE": {
+						"type": "string",
+						"defaultValue": "city_pricea"
+					}
+				},
+				"variables": {
+					"TableNames": {
+						"type": "Array"
+					},
+					"TableName": {
+						"type": "String"
+					}
+				},
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -120,8 +376,8 @@
 						}
 					},
 					{
-						"name": "Set variable1",
-						"type": "SetVariable",
+						"name": "ForEach1",
+						"type": "ForEach",
 						"dependsOn": [
 							{
 								"activity": "Get BlobNewFileName",
@@ -132,17 +388,31 @@
 						],
 						"userProperties": [],
 						"typeProperties": {
-							"variableName": "table",
-							"value": {
-								"value": "@activity('Get BlobNewFileName').output.childItems.name[0]",
+							"items": {
+								"value": "@activity('Get BlobNewFileName').output.childItems",
 								"type": "Expression"
-							}
+							},
+							"activities": [
+								{
+									"name": "Append variable1",
+									"type": "AppendVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "table",
+										"value": {
+											"value": "@concat('1',item().name)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
 						}
 					}
 				],
 				"variables": {
 					"table": {
-						"type": "String"
+						"type": "Array"
 					}
 				},
 				"annotations": []
@@ -340,9 +610,7 @@
 				],
 				"typeProperties": {}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
@@ -574,9 +842,7 @@
 					"tableName": "[[dbo].[Sales]"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/OnPre_PandasProfiling')]",
@@ -1197,9 +1463,7 @@
 				],
 				"typeProperties": {}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_ve9')]",
@@ -1290,9 +1554,7 @@
 					"tableName": "[[dbo].[Sales]"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_we5')]",
@@ -1309,37 +1571,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "Sales"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/GCUI1_Retail')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/profiling_Blob_Trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "When a new csv file is put into the profiling blob, the pipeline gets triggered and run.",
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "PBI_passDescription",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/houston-framework/blobs/profiling/",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('profiling_Blob_Trigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
 				}
 			},
 			"dependsOn": []
@@ -1702,6 +1933,37 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/CSV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/profiling_Blob_Trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "When a new csv file is put into the profiling blob, the pipeline gets triggered and run.",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PBI_passDescription",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/houston-framework/blobs/profiling/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('profiling_Blob_Trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PBI_passDescription')]"
 			]
 		},
 		{

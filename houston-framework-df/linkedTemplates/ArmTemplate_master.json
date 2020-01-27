@@ -157,6 +157,9 @@
 					"GCUI01_connectionString": {
 						"value": "[parameters('GCUI01_connectionString')]"
 					},
+					"GCUI1_Retail_connectionString": {
+						"value": "[parameters('GCUI1_Retail_connectionString')]"
+					},
 					"houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri": {
 						"value": "[parameters('houston_framework_ADLS_properties_typeProperties_dataLakeStoreUri')]"
 					},
@@ -219,9 +222,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"GCUI1_Retail_connectionString": {
-						"value": "[parameters('GCUI1_Retail_connectionString')]"
 					},
 					"localTestFileServer_password": {
 						"value": "[parameters('localTestFileServer_password')]"
