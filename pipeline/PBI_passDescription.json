@@ -150,6 +150,73 @@
 					"referenceName": "houston_framework_db",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "Get NewFiles",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Blob_profiling",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"modifiedDatetimeStart": {
+							"value": "@{getPastTime(1,'Minute')}",
+							"type": "Expression"
+						}
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEachNewBlobFile",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get NewFiles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get NewFiles').output.childitems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Set variable tableName",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "TableName",
+								"value": {
+									"value": "@string(item().name.replace('.csv',''))",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
@@ -168,7 +235,7 @@
 		},
 		"variables": {
 			"TableName": {
-				"type": "String"
+				"type": "Array"
 			}
 		},
 		"annotations": []
